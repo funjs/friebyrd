@@ -4,9 +4,8 @@
 
   F = {}
 
-  fail = () -> []
-  succeed = (result) -> [result]
-
+  F.succeed = (result) -> [result]
+  F.fail = () -> []
   
   # exports and sundries
 

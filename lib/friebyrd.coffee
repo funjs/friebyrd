@@ -10,7 +10,7 @@
   
   # exports and sundries
 
-  if module
+  if module?
     module.exports = F
   else
     root.F = F

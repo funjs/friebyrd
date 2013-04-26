@@ -5,7 +5,7 @@
   F = {}
 
   F.succeed = (result) -> [result]
-  F.fail = () -> []
+  F.fail = _.always []
   
   # exports and sundries
 

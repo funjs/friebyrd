@@ -1,0 +1,26 @@
+{
+  "author": "Fogus <me@fogus.me> (http://www.fogus.me)",
+  "name": "Friebyrd",
+  "description": "A miniKanren.",
+  "version": "0.0.0",
+  "homepage": "https://www.github.com/fogus/friebyrd",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fogus/friebyrd.git"
+  },
+  "main": "lib/friebyrd.js",
+  "scripts": {
+    "test": "jasmine-node --coffee --verbose spec"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "contributors": [
+    "Fogus <me@fogus.me> (<http://www.fogus.me>)"
+  ],
+  "dependencies": {
+    "underscore": ">= 1.4.3"
+  },
+  "devDependencies": {}
+}

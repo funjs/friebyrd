@@ -32,7 +32,7 @@
 
   F.isLVar = (v) -> (v instanceof LVar)
 
-    # exports and sundries
+  # exports and sundries
 
   if module?
     module.exports = F

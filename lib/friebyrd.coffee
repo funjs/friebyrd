@@ -24,7 +24,15 @@
   # F.test1();
   #=> [100, 101, 101, 110, 110]
 
-  # exports and sundries
+  class LVar
+    constructor: (name) ->
+      @name = name
+
+  F.lvar = (name) -> new LVar(name)
+
+  F.isLVar = (v) -> (v instanceof LVar)
+
+    # exports and sundries
 
   if module?
     module.exports = F

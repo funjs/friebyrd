@@ -36,6 +36,12 @@
     v = F.lvar("foo")
     F.isLVar(v)
 
+  class Bindings
+    constructor: (seed = {}) ->
+      @binds = _.merge({}, seed)
+   
+  F.emptyness = () -> new Bindings()
+
   # exports and sundries
 
   if module?

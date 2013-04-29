@@ -39,7 +39,10 @@
   class Bindings
     constructor: (seed = {}) ->
       @binds = _.merge({}, seed)
-   
+    extend: (lvar, value) =>
+      @binds[lvar.name] = value
+      this
+
   F.emptyness = () -> new Bindings()
 
   # exports and sundries

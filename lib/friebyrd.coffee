@@ -32,6 +32,10 @@
 
   F.isLVar = (v) -> (v instanceof LVar)
 
+  F.testLVar = () ->
+    v = F.lvar("foo")
+    F.isLVar(v)
+
   # exports and sundries
 
   if module?

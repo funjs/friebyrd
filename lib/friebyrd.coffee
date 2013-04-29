@@ -42,6 +42,12 @@
     extend: (lvar, value) =>
       @binds[lvar.name] = value
       this
+    lookup: (lvar) ->
+      if !F.isLvar(lvar)
+        return lvar
+      if @binds.hasOwnProperty(lvar.name)
+        return this.lookup(@binds[lvar.name])
+      lvar
 
   F.emptyness = () -> new Bindings()
 

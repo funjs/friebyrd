@@ -49,11 +49,11 @@
       o = {}
       o[lvar.name] = value
       new Bindings(_.merge(@binds, o))
+    has: (lvar) ->
+      @binds.hasOwnProperty(lvar.name)
     lookup: (lvar) ->
-      if !F.isLVar(lvar)
-        return lvar
-      if @binds.hasOwnProperty(lvar.name)
-        return this.lookup(@binds[lvar.name])
+      return lvar if !F.isLVar(lvar)
+      return this.lookup(@binds[lvar.name]) if this.has(lvar)
       lvar
 
   F.ignorance = new Bindings()
@@ -94,7 +94,7 @@
     result = goal(F.ignorance)
     return result if v is null
 
-    result.map((s) -> find(v, s))
+    _.map(result, (s) -> find(v, s))
 
   # Logico
   # ------

@@ -69,9 +69,19 @@
       result = F.unify(l, r, bindings)
       if _.exists(result)
         return F.succeed(result)
-      return fail(result)
+      return F.fail(result)
 
-  F.run = (goal) -> goal(F.emptiness)
+  F.run = (goal) -> goal(F.emptyness())
+
+  # Logico
+  # ------
+
+  F.choice = ($v, list) ->
+    return F.fail if _.isEmpty(list)
+
+    F.disj(F.goal($v, _.first(list)),
+                  F.choice($v, _.rest(list)))
+      
 
   # exports and sundries
 

@@ -6,11 +6,22 @@
   F.succeed = (result) -> [result]
   F.fail = _.always []
 
-  F.disj = (l, r) ->
+  disjunction = (l, r) ->
     (x) -> _.cat(l(x), r(x))
-
-  F.conj = (l, r) ->
+  conjunction = (l, r) ->
     (x) -> _.mapcat(l(x), r)
+
+  F.disj = () =>
+    return F.fail if _.isEmpty(arguments)
+    disjunction(_.first(arguments), F.disj.apply(this, _.rest(arguments)))
+
+  F.conj = () ->
+    clauses = _.toArray(arguments)
+    return F.fail if _.isEmpty(clauses)
+    return _.first(clauses) if _.size(clauses) is 1
+    conjunction(_.first(clauses),
+                (s) -> F.conj.apply(null, _.rest(clauses))(s))
+
 
   # Logic variables and bindings
   # ----------------------------

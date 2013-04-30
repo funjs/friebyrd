@@ -1,7 +1,6 @@
 ((root) ->
   root = this
   _ = root._ || require 'underscore'
-
   F = {}
 
   F.succeed = (result) -> [result]

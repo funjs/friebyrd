@@ -10,3 +10,6 @@ test1 = () ->
 
 # test1();
 #=> [100, 101, 101, 110, 110]
+
+F.unify(F.lvar("a"), 42, F.emptyness());
+#=> has "a" === 42

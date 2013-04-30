@@ -34,7 +34,7 @@
       @binds[lvar.name] = value
       this
     lookup: (lvar) ->
-      if !F.isLvar(lvar)
+      if !F.isLVar(lvar)
         return lvar
       if @binds.hasOwnProperty(lvar.name)
         return this.lookup(@binds[lvar.name])
@@ -51,13 +51,13 @@
 
     if _.isEqual(t1, t2)
       return s
-    if isLVar(t1)
+    if F.isLVar(t1)
       return bindings.extend(t1, t2)
-    if isLVar(t2)
+    if F.isLVar(t2)
       return bindings.extend(t2, t1)
     if _.isArray(t1) && _.isArray(t2)
-      s = unify(_.first(t1), _.first(t2), bindings)
-      s = unify(_.rest(t1), _.rest(t2), bindings) if _.exists(s)
+      s = F.unify(_.first(t1), _.first(t2), bindings)
+      s = F.unify(_.rest(t1), _.rest(t2), bindings) if _.exists(s)
       return s
     return null
 

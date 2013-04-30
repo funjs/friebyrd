@@ -71,6 +71,8 @@
         return F.succeed(result)
       return fail(result)
 
+  F.run = (goal) -> goal(F.emptiness)
+
   # exports and sundries
 
   if module?

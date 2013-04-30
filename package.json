@@ -2,7 +2,7 @@
   "author": "Fogus <me@fogus.me> (http://www.fogus.me)",
   "name": "Friebyrd",
   "description": "A miniKanren.",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "https://www.github.com/fogus/friebyrd",
   "license": "MIT",
   "repository": {

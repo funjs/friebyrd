@@ -61,6 +61,16 @@
       return s
     return null
 
+  # Operational logic
+  # -----------------
+
+  F.goal = (l, r) ->
+    (bindings) ->
+      result = F.unify(l, r, bindings)
+      if _.exists(result)
+        return F.succeed(result)
+      return fail(result)
+
   # exports and sundries
 
   if module?

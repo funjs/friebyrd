@@ -13,16 +13,8 @@
   F.conj = (l, r) ->
     (x) -> _.mapcat(l(x), r)
 
-  F.test1 = () ->
-    F.disj(
-      F.disj(F.fail, F.succeed),
-      F.conj(
-        F.disj(((x) -> F.succeed(x + 1)),
-               ((x) -> F.succeed(x + 10))),
-        F.disj(F.succeed, F.succeed)))(100);
-
-  # F.test1();
-  #=> [100, 101, 101, 110, 110]
+  # Logic variables and bindings
+  # ----------------------------
 
   class LVar
     constructor: (name) ->
@@ -50,6 +42,25 @@
       lvar
 
   F.emptyness = () -> new Bindings()
+
+  # Unification
+  # -----------
+
+  F.unify = (l, r, bindings) ->
+    t1 = bindings.lookup(l)
+    t2 = bindings.lookup(r)
+
+    if _.isEqual(t1, t2)
+      return s
+    if isLVar(t1)
+      return bindings.extend(t1, t2)
+    if isLVar(t2)
+      return bindings.extend(t2, t1)
+    if _.isArray(t1) && _.isArray(t2)
+      s = unify(_.first(t1), _.first(t2), bindings)
+      s = unify(_.rest(t1), _.rest(t2), bindings) if _.exists(s)
+      return s
+    return null
 
   # exports and sundries
 

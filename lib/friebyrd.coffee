@@ -11,13 +11,13 @@
   conjunction = (l, r) ->
     (x) -> _.mapcat(l(x), r)
 
-  F.disj = () =>
+  F.disj = () ->
     return F.fail if _.isEmpty(arguments)
     disjunction(_.first(arguments), F.disj.apply(this, _.rest(arguments)))
 
   F.conj = () ->
     clauses = _.toArray(arguments)
-    return F.fail if _.isEmpty(clauses)
+    return F.succeed if _.isEmpty(clauses)
     return _.first(clauses) if _.size(clauses) is 1
     conjunction(_.first(clauses),
                 (s) -> F.conj.apply(null, _.rest(clauses))(s))
@@ -27,23 +27,28 @@
   # ----------------------------
 
   class LVar
-    constructor: (name) ->
-      @name = name
+    constructor: (@name) ->
 
   F.lvar = (name) -> new LVar(name)
-
   F.isLVar = (v) -> (v instanceof LVar)
 
-  F.testLVar = () ->
-    v = F.lvar("foo")
-    F.isLVar(v)
+  find = (v, bindings) ->
+    lvar = bindings.lookup(v)
+    return lvar if F.isLVar(v)
+    if _.isArray(lvar)
+      if _.isEmpty(lvar)
+        return lvar
+      else
+        return _.cons(find(_.first(lvar), bindings), find(_.rest(lvar), bindings))
+    lvar
 
   class Bindings
     constructor: (seed = {}) ->
       @binds = _.merge({}, seed)
-    extend: (lvar, value) =>
-      @binds[lvar.name] = value
-      this
+    extend: (lvar, value) ->
+      o = {}
+      o[lvar.name] = value
+      new Bindings(_.merge(@binds, o))
     lookup: (lvar) ->
       if !F.isLVar(lvar)
         return lvar
@@ -51,7 +56,7 @@
         return this.lookup(@binds[lvar.name])
       lvar
 
-  F.emptyness = () -> new Bindings()
+  F.ignorance = new Bindings()
 
   # Unification
   # -----------
@@ -68,7 +73,7 @@
       return bindings.extend(t2, t1)
     if _.isArray(t1) && _.isArray(t2)
       s = F.unify(_.first(t1), _.first(t2), bindings)
-      s = F.unify(_.rest(t1), _.rest(t2), bindings) if _.exists(s)
+      s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else s
       return s
     return null
 
@@ -78,11 +83,18 @@
   F.goal = (l, r) ->
     (bindings) ->
       result = F.unify(l, r, bindings)
-      if _.exists(result)
-        return F.succeed(result)
-      return F.fail(result)
+      return F.succeed(result) if result isnt null
+      return F.fail(bindings)
 
-  F.run = (goal) -> goal(F.emptyness())
+  F.run = (v, goal) ->
+    if _.isFunction(v)
+      goal = v
+      v = null
+
+    result = goal(F.ignorance)
+    return result if v is null
+
+    result.map((s) -> find(v, s))
 
   # Logico
   # ------

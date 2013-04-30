@@ -11,5 +11,9 @@ test1 = () ->
 # test1();
 #=> [100, 101, 101, 110, 110]
 
+F.testLVar = () ->
+  v = F.lvar("foo")
+  F.isLVar(v)
+
 F.unify(F.lvar("a"), 42, F.emptyness());
 #=> has "a" === 42

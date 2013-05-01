@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>friebyrd.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>friebyrd.coffee</h1>
+        
+
+        
+      </div>
+
+      
+        
+        
+        
+          <div class="highlight"><pre><span class="p">(</span><span class="nf">(root) -&gt;</span>
+  <span class="nv">root = </span><span class="k">this</span>
+  <span class="nv">_ = </span><span class="nx">root</span><span class="p">.</span><span class="nx">_</span> <span class="o">||</span> <span class="nx">require</span> <span class="s">&#39;underscore&#39;</span>
+  <span class="nv">F = </span><span class="p">{}</span></pre></div>
+        
+      
+        
+        
+<h2>Non-determinism</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="nv">F.succeed = </span><span class="nf">(result) -&gt;</span> <span class="p">[</span><span class="nx">result</span><span class="p">]</span>
+  <span class="nv">F.fail = </span><span class="nx">_</span><span class="p">.</span><span class="nx">always</span> <span class="p">[]</span>
+
+  <span class="nv">disjunction = </span><span class="nf">(l, r) -&gt;</span>
+    <span class="nf">(x) -&gt;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">cat</span><span class="p">(</span><span class="nx">l</span><span class="p">(</span><span class="nx">x</span><span class="p">),</span> <span class="nx">r</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>
+  <span class="nv">conjunction = </span><span class="nf">(l, r) -&gt;</span>
+    <span class="nf">(x) -&gt;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">mapcat</span><span class="p">(</span><span class="nx">l</span><span class="p">(</span><span class="nx">x</span><span class="p">),</span> <span class="nx">r</span><span class="p">)</span>
+
+  <span class="nv">F.disj = </span><span class="p">()</span> <span class="nf">-&gt;</span>
+    <span class="k">return</span> <span class="nx">F</span><span class="p">.</span><span class="nx">fail</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="nx">disjunction</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">arguments</span><span class="p">),</span> <span class="nx">F</span><span class="p">.</span><span class="nx">disj</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)))</span>
+
+  <span class="nv">F.conj = </span><span class="p">()</span> <span class="nf">-&gt;</span>
+    <span class="nv">clauses = </span><span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">F</span><span class="p">.</span><span class="nx">succeed</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">clauses</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">clauses</span><span class="p">)</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">size</span><span class="p">(</span><span class="nx">clauses</span><span class="p">)</span> <span class="o">is</span> <span class="mi">1</span>
+    <span class="nx">conjunction</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">clauses</span><span class="p">),</span>
+                <span class="nf">(s) -&gt;</span> <span class="nx">F</span><span class="p">.</span><span class="nx">conj</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">clauses</span><span class="p">))(</span><span class="nx">s</span><span class="p">))</span></pre></div>
+        
+      
+        
+        
+<h2>Knowledge representation</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="k">class</span> <span class="nx">LVar</span>
+    <span class="nv">constructor: </span><span class="nf">(@name) -&gt;</span>
+
+  <span class="nv">F.lvar = </span><span class="nf">(name) -&gt;</span> <span class="k">new</span> <span class="nx">LVar</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
+  <span class="nv">F.isLVar = </span><span class="nf">(v) -&gt;</span> <span class="p">(</span><span class="nx">v</span> <span class="k">instanceof</span> <span class="nx">LVar</span><span class="p">)</span>
+
+  <span class="nv">find = </span><span class="nf">(v, bindings) -&gt;</span>
+    <span class="nv">lvar = </span><span class="nx">bindings</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">lvar</span> <span class="k">if</span> <span class="nx">F</span><span class="p">.</span><span class="nx">isLVar</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">lvar</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">lvar</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">lvar</span>
+      <span class="k">else</span>
+        <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">cons</span><span class="p">(</span><span class="nx">find</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">lvar</span><span class="p">),</span> <span class="nx">bindings</span><span class="p">),</span> <span class="nx">find</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">lvar</span><span class="p">),</span> <span class="nx">bindings</span><span class="p">))</span>
+    <span class="nx">lvar</span>
+
+  <span class="k">class</span> <span class="nx">Bindings</span>
+    <span class="nv">constructor: </span><span class="nf">(seed = {}) -&gt;</span>
+      <span class="vi">@binds = </span><span class="nx">_</span><span class="p">.</span><span class="nx">merge</span><span class="p">({},</span> <span class="nx">seed</span><span class="p">)</span>
+    <span class="nv">extend: </span><span class="nf">(lvar, value) -&gt;</span>
+      <span class="nv">o = </span><span class="p">{}</span>
+      <span class="nx">o</span><span class="p">[</span><span class="nx">lvar</span><span class="p">.</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span>
+      <span class="k">new</span> <span class="nx">Bindings</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">@binds</span><span class="p">,</span> <span class="nx">o</span><span class="p">))</span>
+    <span class="nv">has: </span><span class="nf">(lvar) -&gt;</span>
+      <span class="nx">@binds</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">lvar</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+    <span class="nv">lookup: </span><span class="nf">(lvar) -&gt;</span>
+      <span class="k">return</span> <span class="nx">lvar</span> <span class="k">if</span> <span class="o">!</span><span class="nx">F</span><span class="p">.</span><span class="nx">isLVar</span><span class="p">(</span><span class="nx">lvar</span><span class="p">)</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">@binds</span><span class="p">[</span><span class="nx">lvar</span><span class="p">.</span><span class="nx">name</span><span class="p">])</span> <span class="k">if</span> <span class="k">this</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">lvar</span><span class="p">)</span>
+      <span class="nx">lvar</span>
+
+  <span class="nv">F.ignorance = </span><span class="k">new</span> <span class="nx">Bindings</span><span class="p">()</span></pre></div>
+        
+      
+        
+        
+<h2>Unification</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="nv">F.unify = </span><span class="nf">(l, r, bindings) -&gt;</span>
+    <span class="nv">t1 = </span><span class="nx">bindings</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span>
+    <span class="nv">t2 = </span><span class="nx">bindings</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isEqual</span><span class="p">(</span><span class="nx">t1</span><span class="p">,</span> <span class="nx">t2</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">s</span>
+    <span class="k">if</span> <span class="nx">F</span><span class="p">.</span><span class="nx">isLVar</span><span class="p">(</span><span class="nx">t1</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">t1</span><span class="p">,</span> <span class="nx">t2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">F</span><span class="p">.</span><span class="nx">isLVar</span><span class="p">(</span><span class="nx">t2</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">bindings</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">t2</span><span class="p">,</span> <span class="nx">t1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">t1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">t2</span><span class="p">)</span>
+      <span class="nv">s = </span><span class="nx">F</span><span class="p">.</span><span class="nx">unify</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">t1</span><span class="p">),</span> <span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">t2</span><span class="p">),</span> <span class="nx">bindings</span><span class="p">)</span>
+      <span class="nv">s = </span><span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">isnt</span> <span class="kc">null</span><span class="p">)</span> <span class="k">then</span> <span class="nx">F</span><span class="p">.</span><span class="nx">unify</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">t1</span><span class="p">),</span> <span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">t2</span><span class="p">),</span> <span class="nx">bindings</span><span class="p">)</span> <span class="k">else</span> <span class="nx">s</span>
+      <span class="k">return</span> <span class="nx">s</span>
+    <span class="k">return</span> <span class="kc">null</span></pre></div>
+        
+      
+        
+        
+<h2>Operational logic</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="nv">F.goal = </span><span class="nf">(l, r) -&gt;</span>
+    <span class="nf">(bindings) -&gt;</span>
+      <span class="nv">result = </span><span class="nx">F</span><span class="p">.</span><span class="nx">unify</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">bindings</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">F</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="k">if</span> <span class="nx">result</span> <span class="o">isnt</span> <span class="kc">null</span>
+      <span class="k">return</span> <span class="nx">F</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="nx">bindings</span><span class="p">)</span>
+
+  <span class="nv">F.run = </span><span class="nf">(goal) -&gt;</span>
+    <span class="nx">goal</span><span class="p">(</span><span class="nx">F</span><span class="p">.</span><span class="nx">ignorance</span><span class="p">)</span></pre></div>
+        
+      
+        
+        
+<h2>Logico</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="nv">F.choice = </span><span class="nf">($v, list) -&gt;</span>
+    <span class="k">return</span> <span class="nx">F</span><span class="p">.</span><span class="nx">fail</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isEmpty</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span>
+
+    <span class="nx">F</span><span class="p">.</span><span class="nx">disj</span><span class="p">(</span><span class="nx">F</span><span class="p">.</span><span class="nx">goal</span><span class="p">(</span><span class="nx">$v</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">first</span><span class="p">(</span><span class="nx">list</span><span class="p">)),</span>
+                  <span class="nx">F</span><span class="p">.</span><span class="nx">choice</span><span class="p">(</span><span class="nx">$v</span><span class="p">,</span> <span class="nx">_</span><span class="p">.</span><span class="nx">rest</span><span class="p">(</span><span class="nx">list</span><span class="p">)))</span>
+      </pre></div>
+        
+      
+        
+        
+<h2>Exports and sundries</h2>
+
+        
+      
+        
+        
+
+        
+          <div class="highlight"><pre>  <span class="k">if</span> <span class="nx">module</span><span class="o">?</span>
+    <span class="nv">module.exports = </span><span class="nx">F</span>
+  <span class="k">else</span>
+    <span class="nv">root.F = </span><span class="nx">F</span>
+
+<span class="p">)(</span><span class="k">this</span><span class="p">)</span>
+
+</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

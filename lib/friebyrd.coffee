@@ -3,6 +3,9 @@
   _ = root._ || require 'underscore'
   F = {}
 
+  # Non-determinism
+  # ---------------
+
   F.succeed = (result) -> [result]
   F.fail = _.always []
 
@@ -22,9 +25,8 @@
     conjunction(_.first(clauses),
                 (s) -> F.conj.apply(null, _.rest(clauses))(s))
 
-
-  # Logic variables and bindings
-  # ----------------------------
+  # Knowledge representation
+  # ------------------------
 
   class LVar
     constructor: (@name) ->
@@ -98,8 +100,8 @@
     F.disj(F.goal($v, _.first(list)),
                   F.choice($v, _.rest(list)))
       
-
-  # exports and sundries
+  # Exports and sundries
+  # --------------------
 
   if module?
     module.exports = F

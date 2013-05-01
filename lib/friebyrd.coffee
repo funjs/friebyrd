@@ -86,15 +86,8 @@
       return F.succeed(result) if result isnt null
       return F.fail(bindings)
 
-  F.run = (v, goal) ->
-    if _.isFunction(v)
-      goal = v
-      v = null
-
-    result = goal(F.ignorance)
-    return result if v is null
-
-    _.map(result, (s) -> find(v, s))
+  F.run = (goal) ->
+    goal(F.ignorance)
 
   # Logico
   # ------

@@ -17,16 +17,26 @@ First, we define two primitive non-deterministic functions; one of them yields n
     F.succeed = (result) -> [result]
     F.fail = _.always []
 
+We build more complex non-deterministic functions by combining the existing ones with the help of the following two combinators.
+
+`(disjunction l r)` returns all the results of `l` and all the results of `r`, or returns no results only if neither `l` nor `r` returned any.  In that sense, it is analogous to the logical disjunctionunction.
+
+    disjunction = (l, r) ->
+      (x) -> _.cat(l(x), r(x))
+
+`(conjunction l r)` looks like a functional composition of `r` and `l`.  Only `(l x)` may return several results, so we have to apply `r` to each of them.  Obviously `(conjunction fail f)` and `(conjunction f fail)` are both equivalent to `fail`: they return no results, ever. It that sense, `conjunction` is analogous to the logical conjunction.
+
+    conjunction = (l, r) ->
+      (x) -> _.mapcat(l(x), r)
 
 
-  disjunction = (l, r) ->
-    (x) -> _.cat(l(x), r(x))
-  conjunction = (l, r) ->
-    (x) -> _.mapcat(l(x), r)
 
-  F.disj = () ->
-    return F.fail if _.isEmpty(arguments)
-    disjunction(_.first(arguments), F.disj.apply(this, _.rest(arguments)))
+    F.disj = () ->
+      return F.fail if _.isEmpty(arguments)
+      disjunction(_.first(arguments), 
+	              F.disj.apply(this, _.rest(arguments)))
+
+
 
   F.conj = () ->
     clauses = _.toArray(arguments)

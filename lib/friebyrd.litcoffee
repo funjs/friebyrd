@@ -162,17 +162,21 @@ We also need a way to 'run' a goal, to see what knowledge we can obtain starting
     F.run = (goal) ->
       goal(F.ignorance)
 
-# Logico
-# ------
+# Logic programs
+# --------------
 
-  F.choice = ($v, list) ->
-    return F.fail if _.isEmpty(list)
+We can build more complex goals using lambda-abstractions and previously defined combinators, `conj` and `disj`.  For example, we can define the function `choice` such that `choice(t1, array)` is a goal that succeeds if `t1` is an element of `array`.
 
-    F.disj(F.goal($v, _.first(list)),
-                  F.choice($v, _.rest(list)))
+    F.choice = ($v, list) ->
+      return F.fail if _.isEmpty(list)
 
-  # Exports and sundries
-  # --------------------
+      F.disj(F.goal($v, _.first(list)),
+                    F.choice($v, _.rest(list)))
+
+The name `choice` should evoke [The Axiom of Choice](http://en.wikipedia.org/wiki/Axiom_of_choice)...
+
+# Exports and sundries
+# --------------------
 
   if module?
     module.exports = F

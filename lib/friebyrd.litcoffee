@@ -50,21 +50,30 @@ And that's all that there is for the built-in non-deterministic functions.
 # Knowledge representation
 # ------------------------
 
-  class LVar
-    constructor: (@name) ->
+One may think of regular variables as "certain knowledge": they give  names to definite values.  A logic variable then stands for "improvable ignorance".  An unbound logic variable represents no  knowledge at all; in other words, it represents the result of a measurement *before* we have done the measurement. A logic variable may be associated with a definite value, like 10. That means definite knowledge.  A logic variable may be associated with a semi-definite value, like `[$X]` where `$X` is an unbound variable. We know something about the original variable: it is associated with the array of one element.  We can't say though what that element is. A logic variable can be associated with another, unbound logic variable. In that case, we still don't know what precisely the original variable stands for. However, we can say that it represents the same thing as the other variable. So, our uncertainty is reduced.
 
-  F.lvar = (name) -> new LVar(name)
-  F.isLVar = (v) -> (v instanceof LVar)
+I've chosen to represent logic variables with their own simple type.
 
-  find = (v, bindings) ->
-    lvar = bindings.lookup(v)
-    return lvar if F.isLVar(v)
-    if _.isArray(lvar)
-      if _.isEmpty(lvar)
-        return lvar
-      else
-        return _.cons(find(_.first(lvar), bindings), find(_.rest(lvar), bindings))
-    lvar
+    class LVar
+      constructor: (@name) ->
+
+I've also created a couple of helper functions for creating new variables and checking "variableness" to decouple the representation a bit.
+
+    F.lvar = (name) -> new LVar(name)
+    F.isLVar = (v) -> (v instanceof LVar)
+
+
+
+    find = (v, bindings) ->
+      lvar = bindings.lookup(v)
+      return lvar if F.isLVar(v)
+      if _.isArray(lvar)
+        if _.isEmpty(lvar)
+          return lvar
+        else
+          return _.cons(find(_.first(lvar), bindings),
+  		              find(_.rest(lvar), bindings))
+      lvar
 
   class Bindings
     constructor: (seed = {}) ->

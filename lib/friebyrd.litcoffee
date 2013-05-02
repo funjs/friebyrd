@@ -62,7 +62,23 @@ I've also created a couple of helper functions for creating new variables and ch
     F.lvar = (name) -> new LVar(name)
     F.isLVar = (v) -> (v instanceof LVar)
 
+I implement associations of logic variables and their values (aka, *bindings*) as a class holding a simple JavaScript object.  One may say that a substitution represents our current knowledge of the world.
 
+    class Bindings
+      constructor: (seed = {}) ->
+        @binds = _.merge({}, seed)
+      extend: (lvar, value) ->
+        o = {}
+        o[lvar.name] = value
+        new Bindings(_.merge(@binds, o))
+      has: (lvar) ->
+        @binds.hasOwnProperty(lvar.name)
+      lookup: (lvar) ->
+        return lvar if !F.isLVar(lvar)
+        return this.lookup(@binds[lvar.name]) if this.has(lvar)
+        lvar
+
+  F.ignorance = new Bindings()
 
     find = (v, bindings) ->
       lvar = bindings.lookup(v)
@@ -75,21 +91,6 @@ I've also created a couple of helper functions for creating new variables and ch
   		              find(_.rest(lvar), bindings))
       lvar
 
-  class Bindings
-    constructor: (seed = {}) ->
-      @binds = _.merge({}, seed)
-    extend: (lvar, value) ->
-      o = {}
-      o[lvar.name] = value
-      new Bindings(_.merge(@binds, o))
-    has: (lvar) ->
-      @binds.hasOwnProperty(lvar.name)
-    lookup: (lvar) ->
-      return lvar if !F.isLVar(lvar)
-      return this.lookup(@binds[lvar.name]) if this.has(lvar)
-      lvar
-
-  F.ignorance = new Bindings()
 
   # Unification
   # -----------

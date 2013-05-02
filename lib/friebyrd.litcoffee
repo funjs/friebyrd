@@ -12,8 +12,12 @@ Non-deterministic functions are functions that can have more (or less) than one 
 
 Thus, we represent a 'relation' (aka `non-deterministic function') as a regular CoffeeScript function that returns an array of possible results.
 
-  F.succeed = (result) -> [result]
-  F.fail = _.always []
+First, we define two primitive non-deterministic functions; one of them yields no result whatsoever for any argument; the other merely returns its argument as the sole result.
+
+    F.succeed = (result) -> [result]
+    F.fail = _.always []
+
+
 
   disjunction = (l, r) ->
     (x) -> _.cat(l(x), r(x))

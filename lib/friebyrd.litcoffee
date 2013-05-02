@@ -1,7 +1,11 @@
-((root) ->
-  root = this
-  _ = root._ || require 'underscore'
-  F = {}
+We always start with the JavaScript-like magic scoping mojo!
+
+    ((root) ->
+      root = this
+      _ = root._ || require 'underscore'
+      F = {}
+
+
 
   # Non-determinism
   # ---------------

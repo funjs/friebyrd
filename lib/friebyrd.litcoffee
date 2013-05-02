@@ -144,20 +144,26 @@ If t1 is a pair, so must be `r`.  This means that I can only unify arrays of nes
         return s
       return null
 
-  # Operational logic
-  # -----------------
+# Operational logic
+# -----------------
 
-  F.goal = (l, r) ->
-    (bindings) ->
-      result = F.unify(l, r, bindings)
-      return F.succeed(result) if result isnt null
-      return F.fail(bindings)
+Now we can combine non-deterministic functions (Part 1) and the representation of knowledge (Part 2) into a logic system.  We introduce a `goal` -- a non-deterministic function that takes a substitution and produces 0, 1 or more other bindings (new knowledge). In case the goal produces 0 bindings, we say that the goal failed. We will call any result produced by the goal an "outcome".
 
-  F.run = (goal) ->
-    goal(F.ignorance)
+The functions `succeed` and `fail` defined earlier are obviously  goals.  The latter is the failing goal. OTH, `succeed` is the trivial successful goal, a tautology that doesn't improve our knowledge of the world. We can now add another primitive goal, the result of a "measurement".  The quantum-mechanical connotations of "the measurement" must be obvious by now.
 
-  # Logico
-  # ------
+    F.goal = (l, r) ->
+      (bindings) ->
+        result = F.unify(l, r, bindings)
+        return F.succeed(result) if result isnt null
+        return F.fail(bindings)
+
+We also need a way to 'run' a goal, to see what knowledge we can obtain starting from sheer ignorance
+
+    F.run = (goal) ->
+      goal(F.ignorance)
+
+# Logico
+# ------
 
   F.choice = ($v, list) ->
     return F.fail if _.isEmpty(list)

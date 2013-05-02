@@ -5,10 +5,12 @@ We always start with the JavaScript-like magic scoping mojo!
       _ = root._ || require 'underscore'
       F = {}
 
+Non-determinism
+---------------
 
+Non-deterministic functions are functions that can have more (or less) than one result.  As known from logic, a binary relation xRy (where x ∈ X, y ∈ Y) can be represented by a *function*  `X -> PowerSet{Y}`. As usual in computer science, we interpret the set `PowerSet{Y}` as a multi-set (realized as a regular scheme list). Compare with SQL, which likewise uses multisets and sequences were sets are properly called for. Also compare with [Wadler's "representing failure as a list of successes."](http://citeseer.uark.edu:8080/citeseerx/showciting;jsessionid=FF5F5EAA9D94B1A8618C49C37451D762?cid=377301).
 
-  # Non-determinism
-  # ---------------
+Thus, we represent a 'relation' (aka `non-deterministic function') as a regular CoffeeScript function that returns an array of possible results.
 
   F.succeed = (result) -> [result]
   F.fail = _.always []

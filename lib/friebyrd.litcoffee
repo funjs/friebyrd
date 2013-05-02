@@ -100,7 +100,7 @@ As mentioned, because we overwrite bindings as we discover them the lookup logic
           return lvar
         else
           return _.cons(find(_.first(lvar), bindings),
-  		              find(_.rest(lvar), bindings))
+                        find(_.rest(lvar), bindings))
       lvar
 
 
@@ -178,9 +178,9 @@ The name `choice` should evoke [The Axiom of Choice](http://en.wikipedia.org/wik
 # Exports and sundries
 # --------------------
 
-  if module?
-    module.exports = F
-  else
-    root.F = F
+	  if module?
+	    module.exports = F
+	  else
+	    root.F = F
 
-)(this)
+	)(this)

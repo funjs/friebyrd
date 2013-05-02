@@ -107,22 +107,42 @@ As mentioned, because we overwrite bindings as we discover them the lookup logic
 # Unification
 # -----------
 
+Unification is the process of improving knowledge: or, the process of measurement. That measurement may uncover a contradiction though (things are not what we thought them to be). To be precise, the unification is the statement that two terms are the same. For example, unification of `1` and `1` is successful -- `1` is indeed the same as `1`. That doesn't add however to our knowledge of the world. If the logic variable `$x` is associated with `1` in the current bindings, the unification of `$x` with `2` yields a contradiction (the new measurement is not consistent with the previous measurements / hypotheses). Unification of an unbound logic variable `$x` and `1` improves our knowledge: the "measurement" found that `$x` is actually `1`. We record that fact in the new substitution.
 
-  F.unify = (l, r, bindings) ->
-    t1 = bindings.lookup(l)
-    t2 = bindings.lookup(r)
+Return the new bindings, or `null` on contradiction:
 
-    if _.isEqual(t1, t2)
-      return s
-    if F.isLVar(t1)
-      return bindings.extend(t1, t2)
-    if F.isLVar(t2)
-      return bindings.extend(t2, t1)
-    if _.isArray(t1) && _.isArray(t2)
-      s = F.unify(_.first(t1), _.first(t2), bindings)
-      s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else s
-      return s
-    return null
+    F.unify = (l, r, bindings) ->
+
+Find out what `l` actually is given our knowledge contained in `bindings`:
+
+      t1 = bindings.lookup(l)
+
+Find out what `r` actually is given our knowledge contained in `bindings`:
+
+      t2 = bindings.lookup(r)
+
+If `l` and `r` are the same; no new knowledge:
+
+      if _.isEqual(t1, t2)
+        return s
+
+`l` is an unbound variable:
+
+      if F.isLVar(t1)
+        return bindings.extend(t1, t2)
+
+`r` is an unbound variable:
+
+      if F.isLVar(t2)
+        return bindings.extend(t2, t1)
+
+If t1 is a pair, so must be `r`.  This means that I can only unify arrays of nested arrays bottoming out on values or objects.  I cannot unify objects at the moment.
+
+      if _.isArray(t1) && _.isArray(t2)
+        s = F.unify(_.first(t1), _.first(t2), bindings)
+        s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2),   bindings) else s
+        return s
+      return null
 
   # Operational logic
   # -----------------

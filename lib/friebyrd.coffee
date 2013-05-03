@@ -100,6 +100,11 @@
     F.disj(F.goal($v, _.first(list)),
                   F.choice($v, _.rest(list)))
 
+  F.commono = (l, r) ->
+    $x = F.lvar("x")
+    F.conj(F.choice($x, l),
+           F.choice($x, r))
+
   F.conso = ($a, $b, list) -> F.goal(_.cons($a, $b), list)
       
   # Exports and sundries

@@ -99,6 +99,8 @@
 
     F.disj(F.goal($v, _.first(list)),
                   F.choice($v, _.rest(list)))
+
+  F.conso = ($a, $b, list) -> F.goal(_.cons($a, $b), list)
       
   # Exports and sundries
   # --------------------

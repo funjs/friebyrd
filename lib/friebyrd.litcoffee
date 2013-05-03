@@ -175,6 +175,8 @@ We can build more complex goals using lambda-abstractions and previously defined
 
 The name `choice` should evoke [The Axiom of Choice](http://en.wikipedia.org/wiki/Axiom_of_choice)...
 
+
+
 # Exports and sundries
 # --------------------
 

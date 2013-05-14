@@ -90,6 +90,11 @@ Starting with an empty binding is akin to saying that we start with zero knowled
 
     F.ignorance = new Bindings()
 
+For convenience I'll add a couple of readily accessible logic variables:
+
+    F.$x = F.lvar("x")
+    F.$y = F.lvar("y")
+
 As mentioned, because we overwrite bindings as we discover them the lookup logic is a little pernicious in the face of logic variables bound to other logic variables.
 
     find = (v, bindings) ->

@@ -40,6 +40,11 @@
     nu[variable] = value
     _.merge(bindings, nu)
 
+  F.lookup = (variable, bindings) ->
+    return variable if !F.isLVar(variable)
+    return F.lookup(bindings[variable], bindings) if bindings.hasOwnProperty(variable)
+    return variable
+
   # Unification
   # -----------
 

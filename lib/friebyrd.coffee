@@ -35,6 +35,11 @@
 
   F.ignorance = {}
 
+  F.extend = (variable, value, bindings) ->
+    nu = {}
+    nu[variable] = value
+    _.merge(bindings, nu)
+
   # Unification
   # -----------
 

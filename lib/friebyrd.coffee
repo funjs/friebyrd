@@ -45,21 +45,19 @@
     return F.lookup(bindings[variable], bindings) if bindings.hasOwnProperty(variable) # check this line in orig
     return variable
 
-
-
   # Unification
   # -----------
 
   F.unify = (l, r, bindings) ->
-    t1 = bindings.lookup(l)
-    t2 = bindings.lookup(r)
+    t1 = F.lookup(l, bindings)
+    t2 = F.lookup(r, bindings)
 
     if _.isEqual(t1, t2)
       return s
     if F.isLVar(t1)
-      return bindings.extend(t1, t2)
+      return F.extend(t1, t2, bindings)
     if F.isLVar(t2)
-      return bindings.extend(t2, t1)
+      return F.extend(t2, t1, bindings)
     if _.isArray(t1) && _.isArray(t2)
       s = F.unify(_.first(t1), _.first(t2), bindings)
       s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else s

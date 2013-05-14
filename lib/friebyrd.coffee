@@ -35,6 +35,9 @@
 
   F.ignorance = {}
 
+  F.$x = F.lvar("x")
+  F.$y = F.lvar("y")
+
   F.extend = (variable, value, bindings) ->
     nu = {}
     nu[variable] = value

@@ -33,6 +33,8 @@
   F.isLVar = (v) ->
     _.isString(v) && v.slice(0,2) == "_."
 
+  F.ignorance = {}
+
   # Unification
   # -----------
 

@@ -33,7 +33,7 @@ JavaScript allows you to pass any number of arguments to a function.  Therefore,
 
     F.disj = () ->
       return F.fail if _.isEmpty(arguments)
-      disjunction(_.first(arguments), 
+      disjunction(_.first(arguments),
 	              F.disj.apply(this, _.rest(arguments)))
 
 Likewise, the `conj` function accepts any number of clauses, nit just two as in the original Sokuza.
@@ -124,7 +124,7 @@ Find out what `r` actually is given our knowledge contained in `bindings`:
 If `l` and `r` are the same; no new knowledge:
 
       if _.isEqual(t1, t2)
-        return s
+        return bindings
 
 `l` is an unbound variable:
 
@@ -139,9 +139,9 @@ If `l` and `r` are the same; no new knowledge:
 If t1 is a pair, so must be `r`.  This means that I can only unify arrays of nested arrays bottoming out on values or objects.  I cannot unify objects at the moment.
 
       if _.isArray(t1) && _.isArray(t2)
-        s = F.unify(_.first(t1), _.first(t2), bindings)
-        s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2),   bindings) else s
-        return s
+        bindings = F.unify(_.first(t1), _.first(t2), bindings)
+        bindings = if (bindings isnt null) then F.unify(_.rest(t1), _.rest(t2),   bindings) else bindings
+        return bindings
       return null
 
 # Operational logic

@@ -106,7 +106,9 @@
            F.choice($x, r))
 
   F.conso = ($a, $b, list) -> F.goal(_.cons($a, $b), list)
-      
+
+  F.joino = ($a, $b, list) -> F.goal([$a, $b], list)
+
   # Exports and sundries
   # --------------------
 

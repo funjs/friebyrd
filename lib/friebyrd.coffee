@@ -56,7 +56,7 @@
     t2 = F.lookup(r, bindings)
 
     if _.isEqual(t1, t2)
-      return s
+      return bindings
     if F.isLVar(t1)
       return F.extend(t1, t2, bindings)
     if F.isLVar(t2)

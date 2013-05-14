@@ -30,6 +30,9 @@
 
   F.lvar = (name) -> "_." + name
 
+  F.isLVar = (v) ->
+    _.isString(v) && v.slice(0,2) == "_."
+
   # Unification
   # -----------
 

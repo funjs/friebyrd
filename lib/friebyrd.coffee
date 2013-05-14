@@ -42,8 +42,10 @@
 
   F.lookup = (variable, bindings) ->
     return variable if !F.isLVar(variable)
-    return F.lookup(bindings[variable], bindings) if bindings.hasOwnProperty(variable)
+    return F.lookup(bindings[variable], bindings) if bindings.hasOwnProperty(variable) # check this line in orig
     return variable
+
+
 
   # Unification
   # -----------

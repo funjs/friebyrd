@@ -100,6 +100,8 @@
     F.disj(F.goal($v, _.first(list)),
                   F.choice($v, _.rest(list)))
 
+  F.membero = F.choice
+
   F.commono = (l, r) ->
     $x = F.lvar("x")
     F.conj(F.choice($x, l),

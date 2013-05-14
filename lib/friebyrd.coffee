@@ -62,9 +62,9 @@
     if F.isLVar(t2)
       return F.extend(t2, t1, bindings)
     if _.isArray(t1) && _.isArray(t2)
-      s = F.unify(_.first(t1), _.first(t2), bindings)
-      s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else s
-      return s
+      bindings = F.unify(_.first(t1), _.first(t2), bindings)
+      bindings = if (bindings isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else bindings
+      return bindings
     return null
 
   # Operational logic

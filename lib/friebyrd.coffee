@@ -28,37 +28,7 @@
   # Knowledge representation
   # ------------------------
 
-  class LVar
-    constructor: (@name) ->
-
-  F.lvar = (name) -> new LVar(name)
-  F.isLVar = (v) -> (v instanceof LVar)
-
-  find = (v, bindings) ->
-    lvar = bindings.lookup(v)
-    return lvar if F.isLVar(v)
-    if _.isArray(lvar)
-      if _.isEmpty(lvar)
-        return lvar
-      else
-        return _.cons(find(_.first(lvar), bindings), find(_.rest(lvar), bindings))
-    lvar
-
-  class Bindings
-    constructor: (seed = {}) ->
-      @binds = _.merge({}, seed)
-    extend: (lvar, value) ->
-      o = {}
-      o[lvar.name] = value
-      new Bindings(_.merge(@binds, o))
-    has: (lvar) ->
-      @binds.hasOwnProperty(lvar.name)
-    lookup: (lvar) ->
-      return lvar if !F.isLVar(lvar)
-      return this.lookup(@binds[lvar.name]) if this.has(lvar)
-      lvar
-
-  F.ignorance = new Bindings()
+  F.lvar = (name) -> "_." + name
 
   # Unification
   # -----------

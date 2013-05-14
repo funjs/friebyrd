@@ -68,15 +68,15 @@
     t2 = bindings.lookup(r)
 
     if _.isEqual(t1, t2)
-      return s
+      return bindings
     if F.isLVar(t1)
       return bindings.extend(t1, t2)
     if F.isLVar(t2)
       return bindings.extend(t2, t1)
     if _.isArray(t1) && _.isArray(t2)
-      s = F.unify(_.first(t1), _.first(t2), bindings)
-      s = if (s isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else s
-      return s
+      bindings = F.unify(_.first(t1), _.first(t2), bindings)
+      bindings = if (bindings isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else bindings
+      return bindings
     return null
 
   # Operational logic

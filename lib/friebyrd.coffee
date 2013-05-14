@@ -60,6 +60,9 @@
 
   F.ignorance = new Bindings()
 
+  F.$x = F.lvar("x")
+  F.$y = F.lvar("y")
+
   # Unification
   # -----------
 

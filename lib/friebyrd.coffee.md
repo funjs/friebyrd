@@ -1,7 +1,7 @@
-We always start with the JavaScript-like magic scoping mojo!
+A little setup for grabbing some interesting functions.
 
     root = this
-    _ = root._ || require 'underscore'
+    _ = root._ || require 'underscore-contrib'
     F = {}
 
 Non-determinism

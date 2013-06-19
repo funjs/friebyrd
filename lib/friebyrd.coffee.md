@@ -33,9 +33,7 @@ JavaScript allows you to pass any number of arguments to a function.  Therefore,
 
     F.disj = () ->
       return F.fail if _.isEmpty(arguments)
-      disjunction(_.first(arguments), 
-	              F.disj.apply(this, 
-				  _.rest(arguments)))
+      disjunction(_.first(arguments), F.disj.apply(this, _.rest(arguments)))
 
 Likewise, the `conj` function accepts any number of clauses, nit just two as in the original Sokuza.
 
@@ -204,9 +202,14 @@ TODO - more examples
 Exports and sundries
 --------------------
 
-	  if module?
-	    module.exports = F
-	  else
-	    root.F = F
+Finally, this exports the Friebyrd libraries.
 
-	)(this)
+    if module?
+      module.exports = F
+    else
+      root.F = F
+    
+    )(this)
+
+Enjoy.
+

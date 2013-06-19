@@ -48,8 +48,8 @@ Likewise, the `conj` function accepts any number of clauses, nit just two as in 
 
 And that's all that there is for the built-in non-deterministic functions.
 
-# Knowledge representation
-# ------------------------
+Knowledge representation
+------------------------
 
 One may think of regular variables as "certain knowledge": they give  names to definite values.  A logic variable then stands for "improvable ignorance".  An unbound logic variable represents no  knowledge at all; in other words, it represents the result of a measurement *before* we have done the measurement. A logic variable may be associated with a definite value, like 10. That means definite knowledge.  A logic variable may be associated with a semi-definite value, like `[$X]` where `$X` is an unbound variable. We know something about the original variable: it is associated with the array of one element.  We can't say though what that element is. A logic variable can be associated with another, unbound logic variable. In that case, we still don't know what precisely the original variable stands for. However, we can say that it represents the same thing as the other variable. So, our uncertainty is reduced.
 
@@ -110,8 +110,8 @@ As mentioned, because we overwrite bindings as we discover them the lookup logic
       lvar
 
 
-# Unification
-# -----------
+Unification
+-----------
 
 Unification is the process of improving knowledge: or, the process of measurement. That measurement may uncover a contradiction though (things are not what we thought them to be). To be precise, the unification is the statement that two terms are the same. For example, unification of `1` and `1` is successful -- `1` is indeed the same as `1`. That doesn't add however to our knowledge of the world. If the logic variable `$x` is associated with `1` in the current bindings, the unification of `$x` with `2` yields a contradiction (the new measurement is not consistent with the previous measurements / hypotheses). Unification of an unbound logic variable `$x` and `1` improves our knowledge: the "measurement" found that `$x` is actually `1`. We record that fact in the new substitution.
 
@@ -150,8 +150,8 @@ If t1 is a pair, so must be `r`.  This means that I can only unify arrays of nes
         return bindings
       return null
 
-# Operational logic
-# -----------------
+Operational logic
+-----------------
 
 Now we can combine non-deterministic functions (Part 1) and the representation of knowledge (Part 2) into a logic system.  We introduce a `goal` -- a non-deterministic function that takes a substitution and produces 0, 1 or more other bindings (new knowledge). In case the goal produces 0 bindings, we say that the goal failed. We will call any result produced by the goal an "outcome".
 
@@ -168,8 +168,8 @@ We also need a way to 'run' a goal, to see what knowledge we can obtain starting
     F.run = (goal) ->
       goal(F.ignorance)
 
-# Logic programs
-# --------------
+Logic programs
+--------------
 
 We can build more complex goals using lambda-abstractions and previously defined combinators, `conj` and `disj`.  For example, we can define the function `choice` such that `choice(t1, array)` is a goal that succeeds if `t1` is an element of `array`.
 
@@ -201,8 +201,8 @@ Now for something a little different.
 
 TODO - more examples
 
-# Exports and sundries
-# --------------------
+Exports and sundries
+--------------------
 
 	  if module?
 	    module.exports = F

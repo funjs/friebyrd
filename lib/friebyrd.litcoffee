@@ -179,9 +179,9 @@ We can build more complex goals using lambda-abstractions and previously defined
       F.disj(F.goal($v, _.first(list)),
                     F.choice($v, _.rest(list)))
 
-TODO - examples
+The name `choice` should evoke [The Axiom of Choice](http://en.wikipedia.org/wiki/Axiom_of_choice), but I'll use a more common name:
 
-The name `choice` should evoke [The Axiom of Choice](http://en.wikipedia.org/wiki/Axiom_of_choice)...
+      F.membero = F.choice
 
 Now I can write a very primitive program: find an element that is common in two lists:
 
@@ -190,7 +190,12 @@ Now I can write a very primitive program: find an element that is common in two 
       F.conj(F.choice($x, l),
              F.choice($x, r))
 
-TODO - examples
+    F.conso = ($a, $b, list) -> F.goal(_.cons($a, $b), list)
+
+    F.joino = ($a, $b, list) -> F.goal([$a, $b], list)
+
+
+TODO - more examples
 
 # Exports and sundries
 # --------------------

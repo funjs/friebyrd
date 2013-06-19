@@ -190,7 +190,11 @@ Now I can write a very primitive program: find an element that is common in two 
       F.conj(F.choice($x, l),
              F.choice($x, r))
 
+Now for something a little different.
+
     F.conso = ($a, $b, list) -> F.goal(_.cons($a, $b), list)
+
+`conso` is a goal that succeeds if in the current state of the world, `_.cons($a, $b)` is the same as `l`.  That may, at first, sound like the meaning of cons. However, the declarative formulation is more powerful, because `$a`, `$b`, or `l` might be logic variables.
 
     F.joino = ($a, $b, list) -> F.goal([$a, $b], list)
 

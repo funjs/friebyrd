@@ -1,6 +1,5 @@
 We always start with the JavaScript-like magic scoping mojo!
 
-    ((root) ->
       root = this
       _ = root._ || require 'underscore'
       F = {}
@@ -209,7 +208,5 @@ Finally, this exports the Friebyrd libraries.
     else
       root.F = F
     
-    )(this)
-
 Enjoy.
 

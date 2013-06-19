@@ -1,8 +1,8 @@
 We always start with the JavaScript-like magic scoping mojo!
 
-      root = this
-      _ = root._ || require 'underscore'
-      F = {}
+    root = this
+    _ = root._ || require 'underscore'
+    F = {}
 
 Non-determinism
 ---------------
@@ -207,6 +207,6 @@ Finally, this exports the Friebyrd libraries.
       module.exports = F
     else
       root.F = F
-    
+
 Enjoy.
 

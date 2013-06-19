@@ -33,8 +33,9 @@ JavaScript allows you to pass any number of arguments to a function.  Therefore,
 
     F.disj = () ->
       return F.fail if _.isEmpty(arguments)
-      disjunction(_.first(arguments),
-	              F.disj.apply(this, _.rest(arguments)))
+      disjunction(_.first(arguments), 
+	              F.disj.apply(this, 
+				  _.rest(arguments)))
 
 Likewise, the `conj` function accepts any number of clauses, nit just two as in the original Sokuza.
 
@@ -145,7 +146,7 @@ If t1 is a pair, so must be `r`.  This means that I can only unify arrays of nes
 
       if _.isArray(t1) && _.isArray(t2)
         bindings = F.unify(_.first(t1), _.first(t2), bindings)
-        bindings = if (bindings isnt null) then F.unify(_.rest(t1), _.rest(t2),   bindings) else bindings
+        bindings = if (bindings isnt null) then F.unify(_.rest(t1), _.rest(t2), bindings) else bindings
         return bindings
       return null
 

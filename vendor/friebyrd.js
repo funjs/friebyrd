@@ -71,21 +71,18 @@
       this.binds = _.merge({}, seed);
     }
 
-    return Bindings;
-
-  })();
-
-  ({
-    extend: function(lvar, value) {
+    Bindings.prototype.extend = function(lvar, value) {
       var o;
       o = {};
       o[lvar.name] = value;
       return new Bindings(_.merge(this.binds, o));
-    },
-    has: function(lvar) {
+    };
+
+    Bindings.prototype.has = function(lvar) {
       return this.binds.hasOwnProperty(lvar.name);
-    },
-    lookup: function(lvar) {
+    };
+
+    Bindings.prototype.lookup = function(lvar) {
       if (!F.isLVar(lvar)) {
         return lvar;
       }
@@ -93,8 +90,11 @@
         return this.lookup(this.binds[lvar.name]);
       }
       return lvar;
-    }
-  });
+    };
+
+    return Bindings;
+
+  })();
 
   F.ignorance = new Bindings();
 

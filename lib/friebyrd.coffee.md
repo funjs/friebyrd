@@ -70,19 +70,19 @@ There are actually two ways of implementing substitutions as associative list. I
 
 However, if we use an association-list-like structure (arrays of pairs) then we can just record the associations as we learn them, without modifying the previous ones. If originally we knew `[[$x, $y]]` and later we learned that `$y` is associated with `1`, we can simply prepend the latter association, obtaining `[[$y, 1], [$x, $y]]`. So, adding new knowledge becomes fast. The lookup procedure becomes more complex though, as we have to chase the chains of variables. To obtain the value associated with `$x` in the latter substitution, we first lookup `$x`, obtain `$y` (another logic variable), then lookup `$y` finally obtaining `1`.  I prefer the object-representation since it's more idiomatic, but using an a-list provides an intuitively incremental way of representing knowledge: it is easier to backtrack if we later find out our knowledge leads to a contradiction.
 
-    extend: (lvar, value) ->
-      o = {}
-      o[lvar.name] = value
-      new Bindings(_.merge(@binds, o))
-    has: (lvar) ->
-      @binds.hasOwnProperty(lvar.name)
+      extend: (lvar, value) ->
+        o = {}
+        o[lvar.name] = value
+        new Bindings(_.merge(@binds, o))
+      has: (lvar) ->
+        @binds.hasOwnProperty(lvar.name)
 
 Find the value associated with `lvar` in the `Bindings` instance.  Return `lvar` itself if it is unbound. In miniKanren, this function is called `walk`.
 
-    lookup: (lvar) ->
-      return lvar if !F.isLVar(lvar)
-      return this.lookup(@binds[lvar.name]) if this.has(lvar)
-      lvar
+      lookup: (lvar) ->
+        return lvar if !F.isLVar(lvar)
+        return this.lookup(@binds[lvar.name]) if this.has(lvar)
+        lvar
 
 Starting with an empty binding is akin to saying that we start with zero knowledge.
 

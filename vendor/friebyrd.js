@@ -3,7 +3,7 @@
 
   root = this;
 
-  _ = root._ || require('underscore');
+  _ = root._ || require('underscore-contrib');
 
   F = {};
 
@@ -71,22 +71,20 @@
       this.binds = _.merge({}, seed);
     }
 
-    Bindings.prototype.extend = function(lvar, value) {
-      var o;
-      o = {};
-      o[lvar.name] = value;
-      return new Bindings(_.merge(this.binds, o));
-    };
-
-    Bindings.prototype.has = function(lvar) {
-      return this.binds.hasOwnProperty(lvar.name);
-    };
-
     return Bindings;
 
   })();
 
   ({
+    extend: function(lvar, value) {
+      var o;
+      o = {};
+      o[lvar.name] = value;
+      return new Bindings(_.merge(this.binds, o));
+    },
+    has: function(lvar) {
+      return this.binds.hasOwnProperty(lvar.name);
+    },
     lookup: function(lvar) {
       if (!F.isLVar(lvar)) {
         return lvar;
